@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package api.helloworld.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "mall-shop-be/api/helloworld/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.helloworld.v1";
+
+service User {
+	rpc Register(RegisterRequest) returns (RegisterReply){
+		option(google.api.http)={
+			post:"/register"
+			body:"*"
+		};
+	};
+	rpc Login (LoginRequest) returns (LoginReply){
+		option(google.api.http) = {
+			post:"/login"
+			body:"*"
+		};
+	}	;
+}
+
+message RegisterRequest {
+	string UserName=1;
+	string Password=2;
+}
+message RegisterReply {
+	 string UserName=1;
+	 int64  code=2;
+	 string msg=3;
+}
+
+message LoginRequest {
+	string UserName=1;
+	string Password=2;
+}
+message LoginReply {
+	string token=1;
+	string UserName=2;
+	int64  code=3;
+	string msg=4;
+}
+
