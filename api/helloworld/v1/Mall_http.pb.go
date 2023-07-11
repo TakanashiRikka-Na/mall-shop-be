@@ -19,30 +19,36 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationProfileCreateProfile = "/api.helloworld.v1.Profile/CreateProfile"
-const OperationProfileGetProfile = "/api.helloworld.v1.Profile/GetProfile"
-const OperationProfileUpdateProfile = "/api.helloworld.v1.Profile/UpdateProfile"
+const OperationMallCreateProfile = "/api.helloworld.v1.Mall/CreateProfile"
+const OperationMallGetProfile = "/api.helloworld.v1.Mall/GetProfile"
+const OperationMallLogin = "/api.helloworld.v1.Mall/Login"
+const OperationMallRegister = "/api.helloworld.v1.Mall/Register"
+const OperationMallUpdateProfile = "/api.helloworld.v1.Mall/UpdateProfile"
 
-type ProfileHTTPServer interface {
+type MallHTTPServer interface {
 	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error)
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileReply, error)
+	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileReply, error)
 }
 
-func RegisterProfileHTTPServer(s *http.Server, srv ProfileHTTPServer) {
+func RegisterMallHTTPServer(s *http.Server, srv MallHTTPServer) {
 	r := s.Route("/")
-	r.POST("/user/profile", _Profile_CreateProfile0_HTTP_Handler(srv))
-	r.PUT("/user/profile", _Profile_UpdateProfile0_HTTP_Handler(srv))
-	r.GET("/user/profile", _Profile_GetProfile0_HTTP_Handler(srv))
+	r.POST("/user/profile", _Mall_CreateProfile0_HTTP_Handler(srv))
+	r.PUT("/user/profile", _Mall_UpdateProfile0_HTTP_Handler(srv))
+	r.GET("/user/profile", _Mall_GetProfile0_HTTP_Handler(srv))
+	r.POST("/register", _Mall_Register0_HTTP_Handler(srv))
+	r.POST("/login", _Mall_Login0_HTTP_Handler(srv))
 }
 
-func _Profile_CreateProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.Context) error {
+func _Mall_CreateProfile0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateProfileRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationProfileCreateProfile)
+		http.SetOperation(ctx, OperationMallCreateProfile)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateProfile(ctx, req.(*CreateProfileRequest))
 		})
@@ -55,13 +61,13 @@ func _Profile_CreateProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.C
 	}
 }
 
-func _Profile_UpdateProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.Context) error {
+func _Mall_UpdateProfile0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateProfileRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationProfileUpdateProfile)
+		http.SetOperation(ctx, OperationMallUpdateProfile)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateProfile(ctx, req.(*UpdateProfileRequest))
 		})
@@ -74,13 +80,13 @@ func _Profile_UpdateProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.C
 	}
 }
 
-func _Profile_GetProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.Context) error {
+func _Mall_GetProfile0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetProfileRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationProfileGetProfile)
+		http.SetOperation(ctx, OperationMallGetProfile)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetProfile(ctx, req.(*GetProfileRequest))
 		})
@@ -93,80 +99,13 @@ func _Profile_GetProfile0_HTTP_Handler(srv ProfileHTTPServer) func(ctx http.Cont
 	}
 }
 
-type ProfileHTTPClient interface {
-	CreateProfile(ctx context.Context, req *CreateProfileRequest, opts ...http.CallOption) (rsp *CreateProfileReply, err error)
-	GetProfile(ctx context.Context, req *GetProfileRequest, opts ...http.CallOption) (rsp *GetProfileReply, err error)
-	UpdateProfile(ctx context.Context, req *UpdateProfileRequest, opts ...http.CallOption) (rsp *UpdateProfileReply, err error)
-}
-
-type ProfileHTTPClientImpl struct {
-	cc *http.Client
-}
-
-func NewProfileHTTPClient(client *http.Client) ProfileHTTPClient {
-	return &ProfileHTTPClientImpl{client}
-}
-
-func (c *ProfileHTTPClientImpl) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...http.CallOption) (*CreateProfileReply, error) {
-	var out CreateProfileReply
-	pattern := "/user/profile"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationProfileCreateProfile))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *ProfileHTTPClientImpl) GetProfile(ctx context.Context, in *GetProfileRequest, opts ...http.CallOption) (*GetProfileReply, error) {
-	var out GetProfileReply
-	pattern := "/user/profile"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationProfileGetProfile))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *ProfileHTTPClientImpl) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...http.CallOption) (*UpdateProfileReply, error) {
-	var out UpdateProfileReply
-	pattern := "/user/profile"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationProfileUpdateProfile))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-const OperationUserLogin = "/api.helloworld.v1.User/Login"
-const OperationUserRegister = "/api.helloworld.v1.User/Register"
-
-type UserHTTPServer interface {
-	Login(context.Context, *LoginRequest) (*LoginReply, error)
-	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
-}
-
-func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
-	r := s.Route("/")
-	r.POST("/register", _User_Register0_HTTP_Handler(srv))
-	r.POST("/login", _User_Login0_HTTP_Handler(srv))
-}
-
-func _User_Register0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _Mall_Register0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in RegisterRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserRegister)
+		http.SetOperation(ctx, OperationMallRegister)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Register(ctx, req.(*RegisterRequest))
 		})
@@ -179,13 +118,13 @@ func _User_Register0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) err
 	}
 }
 
-func _User_Login0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _Mall_Login0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LoginRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserLogin)
+		http.SetOperation(ctx, OperationMallLogin)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Login(ctx, req.(*LoginRequest))
 		})
@@ -198,24 +137,27 @@ func _User_Login0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error 
 	}
 }
 
-type UserHTTPClient interface {
+type MallHTTPClient interface {
+	CreateProfile(ctx context.Context, req *CreateProfileRequest, opts ...http.CallOption) (rsp *CreateProfileReply, err error)
+	GetProfile(ctx context.Context, req *GetProfileRequest, opts ...http.CallOption) (rsp *GetProfileReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
 	Register(ctx context.Context, req *RegisterRequest, opts ...http.CallOption) (rsp *RegisterReply, err error)
+	UpdateProfile(ctx context.Context, req *UpdateProfileRequest, opts ...http.CallOption) (rsp *UpdateProfileReply, err error)
 }
 
-type UserHTTPClientImpl struct {
+type MallHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewUserHTTPClient(client *http.Client) UserHTTPClient {
-	return &UserHTTPClientImpl{client}
+func NewMallHTTPClient(client *http.Client) MallHTTPClient {
+	return &MallHTTPClientImpl{client}
 }
 
-func (c *UserHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts ...http.CallOption) (*LoginReply, error) {
-	var out LoginReply
-	pattern := "/login"
+func (c *MallHTTPClientImpl) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...http.CallOption) (*CreateProfileReply, error) {
+	var out CreateProfileReply
+	pattern := "/user/profile"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserLogin))
+	opts = append(opts, http.Operation(OperationMallCreateProfile))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -224,13 +166,52 @@ func (c *UserHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts .
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) Register(ctx context.Context, in *RegisterRequest, opts ...http.CallOption) (*RegisterReply, error) {
+func (c *MallHTTPClientImpl) GetProfile(ctx context.Context, in *GetProfileRequest, opts ...http.CallOption) (*GetProfileReply, error) {
+	var out GetProfileReply
+	pattern := "/user/profile"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetProfile))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts ...http.CallOption) (*LoginReply, error) {
+	var out LoginReply
+	pattern := "/login"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationMallLogin))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) Register(ctx context.Context, in *RegisterRequest, opts ...http.CallOption) (*RegisterReply, error) {
 	var out RegisterReply
 	pattern := "/register"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserRegister))
+	opts = append(opts, http.Operation(OperationMallRegister))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...http.CallOption) (*UpdateProfileReply, error) {
+	var out UpdateProfileReply
+	pattern := "/user/profile"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationMallUpdateProfile))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

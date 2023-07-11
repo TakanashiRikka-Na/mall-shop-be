@@ -11,7 +11,7 @@ import (
 var ProviderSet = wire.NewSet(NewMallService)
 
 type MallService struct {
-	pb.UnimplementedUserServer
+	pb.UnimplementedMallServer
 	erc errs.ErrorController
 	uc  *biz.UserUseCase
 	pc  *biz.ProfileUseCase

@@ -39,8 +39,7 @@ func NewHTTPServer(c *conf.Server, Mall *service.MallService, logger log.Logger)
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterUserHTTPServer(srv, Mall)
-	v1.RegisterProfileHTTPServer(srv, Mall)
+	v1.RegisterMallHTTPServer(srv, Mall)
 	return srv
 }
 func NewSkipRoutersMatcher() selector.MatchFunc {

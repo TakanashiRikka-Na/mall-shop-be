@@ -3,19 +3,19 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Mall API
     version: 0.0.1
 paths:
     /login:
         post:
             tags:
-                - User
-            operationId: User_Login
+                - Mall
+            operationId: Mall_Login
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.helloworld.v1.LoginRequest'
+                            $ref: '#/components/schemas/LoginRequest'
                 required: true
             responses:
                 "200":
@@ -23,17 +23,23 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.helloworld.v1.LoginReply'
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /register:
         post:
             tags:
-                - User
-            operationId: User_Register
+                - Mall
+            operationId: Mall_Register
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.helloworld.v1.RegisterRequest'
+                            $ref: '#/components/schemas/RegisterRequest'
                 required: true
             responses:
                 "200":
@@ -41,28 +47,40 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.helloworld.v1.RegisterReply'
+                                $ref: '#/components/schemas/RegisterReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /user/profile:
         get:
             tags:
-                - Profile
-            operationId: Profile_GetProfile
+                - Mall
+            operationId: Mall_GetProfile
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.helloworld.v1.GetProfileReply'
+                                $ref: '#/components/schemas/GetProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         put:
             tags:
-                - Profile
-            operationId: Profile_UpdateProfile
+                - Mall
+            operationId: Mall_UpdateProfile
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.helloworld.v1.UpdateProfileRequest'
+                            $ref: '#/components/schemas/UpdateProfileRequest'
                 required: true
             responses:
                 "200":
@@ -70,16 +88,22 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.helloworld.v1.UpdateProfileReply'
+                                $ref: '#/components/schemas/UpdateProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
         post:
             tags:
-                - Profile
-            operationId: Profile_CreateProfile
+                - Mall
+            operationId: Mall_CreateProfile
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.helloworld.v1.CreateProfileRequest'
+                            $ref: '#/components/schemas/CreateProfileRequest'
                 required: true
             responses:
                 "200":
@@ -87,10 +111,16 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.helloworld.v1.CreateProfileReply'
+                                $ref: '#/components/schemas/CreateProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        api.helloworld.v1.CreateProfileReply:
+        CreateProfileReply:
             type: object
             properties:
                 msg:
@@ -100,7 +130,7 @@ components:
                     format: int64
                 UserName:
                     type: string
-        api.helloworld.v1.CreateProfileRequest:
+        CreateProfileRequest:
             type: object
             properties:
                 UserName:
@@ -119,7 +149,7 @@ components:
                     type: array
                     items:
                         type: string
-        api.helloworld.v1.GetProfileReply:
+        GetProfileReply:
             type: object
             properties:
                 UserName:
@@ -138,7 +168,15 @@ components:
                     type: array
                     items:
                         type: string
-        api.helloworld.v1.LoginReply:
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginReply:
             type: object
             properties:
                 token:
@@ -150,14 +188,14 @@ components:
                     format: int64
                 msg:
                     type: string
-        api.helloworld.v1.LoginRequest:
+        LoginRequest:
             type: object
             properties:
                 UserName:
                     type: string
                 Password:
                     type: string
-        api.helloworld.v1.RegisterReply:
+        RegisterReply:
             type: object
             properties:
                 UserName:
@@ -167,14 +205,30 @@ components:
                     format: int64
                 msg:
                     type: string
-        api.helloworld.v1.RegisterRequest:
+        RegisterRequest:
             type: object
             properties:
                 UserName:
                     type: string
                 Password:
                     type: string
-        api.helloworld.v1.UpdateProfileReply:
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateProfileReply:
             type: object
             properties:
                 msg:
@@ -184,7 +238,7 @@ components:
                     format: int64
                 UserName:
                     type: string
-        api.helloworld.v1.UpdateProfileRequest:
+        UpdateProfileRequest:
             type: object
             properties:
                 UserName:
@@ -204,5 +258,4 @@ components:
                     items:
                         type: string
 tags:
-    - name: Profile
-    - name: User
+    - name: Mall

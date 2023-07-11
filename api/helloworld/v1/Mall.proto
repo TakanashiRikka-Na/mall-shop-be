@@ -7,26 +7,6 @@ import "google/api/annotations.proto";
 option go_package = "mall-shop-be/api/helloworld/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.helloworld.v1";
-service Profile {
-	rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply){
-		option(google.api.http)={
-			post:"/user/profile"
-			body:"*"
-		};
-	};
-	rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply){
-		option(google.api.http)={
-			put:"/user/profile"
-			body:"*"
-		};
-	};
-	rpc GetProfile (GetProfileRequest) returns (GetProfileReply){
-		option(google.api.http)={
-			get:"/user/profile"
-		};
-	};
-
-}
 
 
 message UpdateProfileRequest {
@@ -71,7 +51,25 @@ message GetProfileReply {
 }
 
 
-service User {
+service Mall {
+	rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply){
+		option(google.api.http)={
+			post:"/user/profile"
+			body:"*"
+		};
+	};
+	rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply){
+		option(google.api.http)={
+			put:"/user/profile"
+			body:"*"
+		};
+	};
+	rpc GetProfile (GetProfileRequest) returns (GetProfileReply){
+		option(google.api.http)={
+			get:"/user/profile"
+		};
+	};
+
 	rpc Register(RegisterRequest) returns (RegisterReply){
 		option(google.api.http)={
 			post:"/register"
