@@ -7,8 +7,8 @@ func NewUserUseCase(repo UserRepo, logger log.Logger) *UserUseCase {
 }
 
 type UserRepo interface {
-	Register() error
-	Login() (string, error)
+	Register(user User) error
+	Login(user User) (string, error)
 }
 
 type User struct {
@@ -21,12 +21,10 @@ type UserUseCase struct {
 	log  *log.Helper
 }
 
-func (u UserUseCase) Register() error {
-	//TODO implement me
-	panic("implement me")
+func (u UserUseCase) Register(user User) error {
+	return u.repo.Register(user)
 }
 
-func (u UserUseCase) Login() (string, error) {
-	//TODO implement me
-	panic("implement me")
+func (u UserUseCase) Login(user User) (string, error) {
+	return u.repo.Login(user)
 }
