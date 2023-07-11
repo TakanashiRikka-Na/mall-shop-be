@@ -14,7 +14,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewRedisConn, NewDB, NewUserRepo, errors.NewErrorController)
+var ProviderSet = wire.NewSet(NewData, NewRedisConn, NewDB, NewUserRepo, NewProfileRepo, errors.NewErrorController)
 
 // Data .github.com/go-redis/redis
 type Data struct {
@@ -23,7 +23,8 @@ type Data struct {
 }
 
 const (
-	UserError = "user error"
+	UserError    = "user error"
+	ProfileError = "Profile error"
 )
 
 // NewData .

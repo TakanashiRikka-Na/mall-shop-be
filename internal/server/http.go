@@ -1,8 +1,12 @@
 package server
 
 import (
+	"context"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
+	"github.com/gorilla/handlers"
 	v1 "mall-shop-be/api/helloworld/v1"
 	"mall-shop-be/internal/conf"
+	"mall-shop-be/internal/pkg/auth"
 	"mall-shop-be/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -11,10 +15,18 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, user *service.UserService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, Mall *service.MallService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			selector.Server(auth.AUTH()).Match(NewSkipRoutersMatcher()).Build(),
+		),
+		http.Filter(
+			handlers.CORS(
+				handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+				handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE"}),
+				handlers.AllowedOrigins([]string{"*"}),
+			),
 		),
 	}
 	if c.Http.Network != "" {
@@ -27,6 +39,21 @@ func NewHTTPServer(c *conf.Server, user *service.UserService, logger log.Logger)
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterUserHTTPServer(srv, user)
+	v1.RegisterUserHTTPServer(srv, Mall)
+	v1.RegisterProfileHTTPServer(srv, Mall)
 	return srv
+}
+func NewSkipRoutersMatcher() selector.MatchFunc {
+
+	skipRouters := map[string]struct{}{
+		"/api.helloworld.v1.User/Login":    {},
+		"/api.helloworld.v1.User/Register": {},
+	}
+
+	return func(ctx context.Context, operation string) bool {
+		if _, ok := skipRouters[operation]; ok {
+			return false
+		}
+		return true
+	}
 }
