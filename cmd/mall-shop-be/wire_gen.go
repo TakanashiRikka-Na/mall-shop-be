@@ -12,6 +12,7 @@ import (
 	"mall-shop-be/internal/biz"
 	"mall-shop-be/internal/conf"
 	"mall-shop-be/internal/data"
+	"mall-shop-be/internal/errors"
 	"mall-shop-be/internal/server"
 	"mall-shop-be/internal/service"
 )
@@ -30,7 +31,8 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
-	userRepo := data.NewUserRepo(dataData, logger)
+	errorController := errors.NewErrorController()
+	userRepo := data.NewUserRepo(dataData, logger, errorController)
 	userUseCase := biz.NewUserUseCase(userRepo, logger)
 	userService := service.NewUserService(userUseCase)
 	grpcServer := server.NewGRPCServer(confServer, userService, logger)

@@ -8,6 +8,10 @@ option java_package = "helloworld.v1";
 option objc_class_prefix = "APIHelloworldV1";
 
 enum ErrorReason {
-  GREETER_UNSPECIFIED = 0;
-  USER_NOT_FOUND = 1;
+  USER_NOT_FOUND = 0;
+  USER_EXISTED=1;
+  UNKNOWN_ERROR=2;
+  PASSWD_NOT_VALID=3;
+  PASSWD_ERROR=4;
+  USERNAME_NOT_VALID=5;
 }
