@@ -23,8 +23,8 @@ type userRepo struct {
 	erc  errs.ErrorController
 }
 
-func unknownErr(err error, msg string, repo *userRepo) *errors.Error {
-	return repo.erc.UnKnownError().WithMetadata(map[string]string{msg: err.Error()})
+func (u *userRepo) unknownErr(err error, msg string) *errors.Error {
+	return u.erc.UnKnownError().WithMetadata(map[string]string{msg: err.Error()})
 }
 
 func NewUserRepo(data *Data, logger log.Logger, controller errs.ErrorController) biz.UserRepo {
@@ -58,7 +58,7 @@ func (u *userRepo) Register(user biz.User) error {
 	if err = tx.Model(&User{}).Create(&userInfo).Error; err != nil {
 		u.log.Error(err)
 		tx.Rollback()
-		return unknownErr(err, UserError, u)
+		return u.unknownErr(err, UserError)
 	}
 	tx.Commit()
 	return nil
@@ -79,14 +79,14 @@ func (u *userRepo) Login(user biz.User) (string, error) {
 	var userInfo User
 	if err = u.data.DB.Model(&User{}).Where("user_name=?", user.UserName).Find(&userInfo).Error; err != nil {
 		u.log.Error(err)
-		return "", unknownErr(err, UserError, u)
+		return "", u.unknownErr(err, UserError)
 	}
 	if !compareHashPasswd(user.Password, userInfo.HashedPasswd) {
 		return "", u.erc.PasswdError()
 	}
 	token, err = utils.GenerateToken(user.UserName)
 	if err != nil {
-		return "", unknownErr(err, "generate token err", u)
+		return "", u.unknownErr(err, "generate token err")
 	}
 	if err = u.data.Rdb.Set(user.UserName, token, time.Hour).Err(); err != nil {
 		u.log.Error(err)
