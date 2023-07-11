@@ -29,7 +29,7 @@ message Data {
   message Database {
     string driver = 1;
     string host = 2;
-    string port = 3;
+    int64 port = 3;
     string DBName=4;
     string Param=5;
     string user=6;
