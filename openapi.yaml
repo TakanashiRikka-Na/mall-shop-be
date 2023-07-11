@@ -3,8 +3,82 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: User API
     version: 0.0.1
-paths: {}
+paths:
+    /login:
+        post:
+            tags:
+                - User
+            operationId: User_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.helloworld.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.helloworld.v1.LoginReply'
+    /register:
+        post:
+            tags:
+                - User
+            operationId: User_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.helloworld.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.helloworld.v1.RegisterReply'
 components:
-    schemas: {}
+    schemas:
+        api.helloworld.v1.LoginReply:
+            type: object
+            properties:
+                token:
+                    type: string
+                UserName:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+        api.helloworld.v1.LoginRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Password:
+                    type: string
+        api.helloworld.v1.RegisterReply:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+        api.helloworld.v1.RegisterRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Password:
+                    type: string
+tags:
+    - name: User
