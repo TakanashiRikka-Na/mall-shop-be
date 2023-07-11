@@ -3,7 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: User API
+    title: ""
     version: 0.0.1
 paths:
     /login:
@@ -42,8 +42,102 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.helloworld.v1.RegisterReply'
+    /user/profile:
+        get:
+            tags:
+                - Profile
+            operationId: Profile_GetProfile
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.helloworld.v1.GetProfileReply'
+        put:
+            tags:
+                - Profile
+            operationId: Profile_UpdateProfile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.helloworld.v1.UpdateProfileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.helloworld.v1.UpdateProfileReply'
+        post:
+            tags:
+                - Profile
+            operationId: Profile_CreateProfile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.helloworld.v1.CreateProfileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.helloworld.v1.CreateProfileReply'
 components:
     schemas:
+        api.helloworld.v1.CreateProfileReply:
+            type: object
+            properties:
+                msg:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                UserName:
+                    type: string
+        api.helloworld.v1.CreateProfileRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
+        api.helloworld.v1.GetProfileReply:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
         api.helloworld.v1.LoginReply:
             type: object
             properties:
@@ -80,5 +174,35 @@ components:
                     type: string
                 Password:
                     type: string
+        api.helloworld.v1.UpdateProfileReply:
+            type: object
+            properties:
+                msg:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                UserName:
+                    type: string
+        api.helloworld.v1.UpdateProfileRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
 tags:
+    - name: Profile
     - name: User
