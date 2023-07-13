@@ -13,6 +13,7 @@ type ErrorController interface {
 	UserNameValid() *errors.Error
 	PasswdValid() *errors.Error
 	PasswdError() *errors.Error
+	GoodExist() *errors.Error
 }
 
 func NewErrorController() ErrorController {
@@ -35,6 +36,7 @@ var (
 	PasswdValid   = errors.BadRequest(v1.ErrorReason_PASSWD_NOT_VALID.String(), "密码不符合规范")
 	PasswdError   = errors.BadRequest(v1.ErrorReason_PASSWD_ERROR.String(), "密码错误")
 	UserNameVaild = errors.BadRequest(v1.ErrorReason_USERNAME_NOT_VALID.String(), "用户名不是纯数字")
+	GoodExisted   = errors.BadRequest(v1.ErrorReason_GOODS_EXISTED.String(), "该商品已经存在")
 )
 
 func (*ERR) UnKnownError() *errors.Error {
@@ -51,4 +53,8 @@ func (*ERR) UserNotFound() *errors.Error {
 
 func (*ERR) PasswdValid() *errors.Error {
 	return PasswdValid
+}
+
+func (*ERR) GoodExist() *errors.Error {
+	return GoodExisted
 }
