@@ -7,7 +7,162 @@ import "google/api/annotations.proto";
 option go_package = "mall-shop-be/api/helloworld/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.helloworld.v1";
+message CreateGoodRequest{
+	string ID=1;
+	string Name=2;
+	int64 Kind=3;
+	string Description=4;
+	string Price=5;
+	string FromUser=6;
+	bool   IsSold=7;
+}
+message CreateGoodReply{
+   string GoodID=1;
+	 string Msg=2;
+	 string Code=3;
+}
+message UpdateGoodRequest{
+	string ID=1;
+	string Name=2;
+	int64 Kind=3;
+	string Description=4;
+	string Price=5;
+	string FromUser=6;
+	bool   IsSold=7;
+}
+message UpdateGoodReply{
+	string GoodID=1;
+	string Msg=2;
+	string Code=3;
+}
+message  GetGoodsByKindRequest{
+	int64 Kind=1;
+}
+message GetGoodsByNameRequest{
+	string Name=1;
+}
 
+message  GetGoodsByUserNameRequest{
+	string UserName=1;
+}
+message GetOwnGoodsRequest{}
+message  GetGoodsReply{
+	message Good{
+		string ID=1;
+		string Name=2;
+		int64 Kind=3;
+		string Description=4;
+		string Price=5;
+		string FromUser=6;
+		bool   IsSold=7;
+	}
+	repeated Good Goods=1;
+	string Msg=2;
+	string Code=3;
+}
+
+message GetGoodByIDRequest{
+	string ID=1;
+}
+message GetGoodReply{
+	string ID=1;
+	string Name=2;
+	int64 Kind=3;
+	string Description=4;
+	string Price=5;
+	string FromUser=6;
+	bool   IsSold=7;
+}
+
+message 	DeleteGoodByIDRequest{
+	string ID=1;
+}
+message  DeleteGoodReply{
+	string GoodID=1;
+	string Msg=2;
+	string Code=3;
+}
+service Mall {
+	// 商品信息接口--------------------------------------------------------------------------------------------------
+	rpc CreateGood(CreateGoodRequest) returns (CreateGoodReply){
+		option(google.api.http)={
+			post:"/mall/goods"
+			body:"*"
+		};
+	}
+	rpc UpdateGood(UpdateGoodRequest) returns (UpdateGoodReply){
+		option(google.api.http)={
+			put:"/mall/goods"
+			body:"*"
+		};
+	}
+
+	rpc GetGoodsByKind(GetGoodsByKindRequest) returns (GetGoodsReply){
+		option(google.api.http)={
+			get:"/mall/goods/{Kind}"
+		};
+	}
+
+	rpc GetGoodsByUserName(GetGoodsByUserNameRequest) returns (GetGoodsReply){
+		option(google.api.http)={
+			get:"/user/goods/{UserName}"
+		};
+	}
+	rpc GetOwnGoods(GetOwnGoodsRequest) returns (GetGoodsReply){
+		option(google.api.http)={
+			get:"/user/goods"
+		};
+	};
+
+	rpc GetGoodsByName(GetGoodsByNameRequest) returns (GetGoodsReply){
+		option(google.api.http)={
+			get:"/user/goods/name/{Name}"
+		};
+	};
+
+	rpc GetGoodByID(GetGoodByIDRequest) returns (GetGoodReply){
+		option(google.api.http)={
+			get:"/user/goods/ID/{ID}"
+		};
+	};
+	rpc DeleteGoodByID(DeleteGoodByIDRequest) returns (DeleteGoodReply){
+		option(google.api.http)={
+			get:"/user/goods/ID/{ID}"
+		};
+	};
+
+	//用户信息接口---------------------------------------------------------------------------------------------------
+	rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply){
+		option(google.api.http)={
+			post:"/user/profile"
+			body:"*"
+		};
+	};
+	rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply){
+		option(google.api.http)={
+			put:"/user/profile"
+			body:"*"
+		};
+	};
+	rpc GetProfile (GetProfileRequest) returns (GetProfileReply){
+		option(google.api.http)={
+			get:"/user/profile"
+		};
+	}
+	// 登录注册接口--------------------------------------------------------------------------------------------------
+	rpc Register(RegisterRequest) returns (RegisterReply){
+		option(google.api.http)={
+			post:"/register"
+			body:"*"
+		};
+	};
+	rpc Login (LoginRequest) returns (LoginReply){
+		option(google.api.http) = {
+			post:"/login"
+			body:"*"
+		};
+	}	;
+}
 
 message UpdateProfileRequest {
 	string UserName = 1;
@@ -51,38 +206,7 @@ message GetProfileReply {
 }
 
 
-service Mall {
-	rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply){
-		option(google.api.http)={
-			post:"/user/profile"
-			body:"*"
-		};
-	};
-	rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply){
-		option(google.api.http)={
-			put:"/user/profile"
-			body:"*"
-		};
-	};
-	rpc GetProfile (GetProfileRequest) returns (GetProfileReply){
-		option(google.api.http)={
-			get:"/user/profile"
-		};
-	};
 
-	rpc Register(RegisterRequest) returns (RegisterReply){
-		option(google.api.http)={
-			post:"/register"
-			body:"*"
-		};
-	};
-	rpc Login (LoginRequest) returns (LoginReply){
-		option(google.api.http) = {
-			post:"/login"
-			body:"*"
-		};
-	}	;
-}
 
 message RegisterRequest {
 	string UserName=1;

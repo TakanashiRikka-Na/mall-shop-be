@@ -19,27 +19,221 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationMallCreateGood = "/api.helloworld.v1.Mall/CreateGood"
 const OperationMallCreateProfile = "/api.helloworld.v1.Mall/CreateProfile"
+const OperationMallDeleteGoodByID = "/api.helloworld.v1.Mall/DeleteGoodByID"
+const OperationMallGetGoodByID = "/api.helloworld.v1.Mall/GetGoodByID"
+const OperationMallGetGoodsByKind = "/api.helloworld.v1.Mall/GetGoodsByKind"
+const OperationMallGetGoodsByName = "/api.helloworld.v1.Mall/GetGoodsByName"
+const OperationMallGetGoodsByUserName = "/api.helloworld.v1.Mall/GetGoodsByUserName"
+const OperationMallGetOwnGoods = "/api.helloworld.v1.Mall/GetOwnGoods"
 const OperationMallGetProfile = "/api.helloworld.v1.Mall/GetProfile"
 const OperationMallLogin = "/api.helloworld.v1.Mall/Login"
 const OperationMallRegister = "/api.helloworld.v1.Mall/Register"
+const OperationMallUpdateGood = "/api.helloworld.v1.Mall/UpdateGood"
 const OperationMallUpdateProfile = "/api.helloworld.v1.Mall/UpdateProfile"
 
 type MallHTTPServer interface {
+	// CreateGood 商品信息接口--------------------------------------------------------------------------------------------------
+	CreateGood(context.Context, *CreateGoodRequest) (*CreateGoodReply, error)
+	// CreateProfile用户信息接口---------------------------------------------------------------------------------------------------
 	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error)
+	DeleteGoodByID(context.Context, *DeleteGoodByIDRequest) (*DeleteGoodReply, error)
+	GetGoodByID(context.Context, *GetGoodByIDRequest) (*GetGoodReply, error)
+	GetGoodsByKind(context.Context, *GetGoodsByKindRequest) (*GetGoodsReply, error)
+	GetGoodsByName(context.Context, *GetGoodsByNameRequest) (*GetGoodsReply, error)
+	GetGoodsByUserName(context.Context, *GetGoodsByUserNameRequest) (*GetGoodsReply, error)
+	GetOwnGoods(context.Context, *GetOwnGoodsRequest) (*GetGoodsReply, error)
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	// Register 登录注册接口--------------------------------------------------------------------------------------------------
 	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
+	UpdateGood(context.Context, *UpdateGoodRequest) (*UpdateGoodReply, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileReply, error)
 }
 
 func RegisterMallHTTPServer(s *http.Server, srv MallHTTPServer) {
 	r := s.Route("/")
+	r.POST("/mall/goods", _Mall_CreateGood0_HTTP_Handler(srv))
+	r.PUT("/mall/goods", _Mall_UpdateGood0_HTTP_Handler(srv))
+	r.GET("/mall/goods/{Kind}", _Mall_GetGoodsByKind0_HTTP_Handler(srv))
+	r.GET("/user/goods/{UserName}", _Mall_GetGoodsByUserName0_HTTP_Handler(srv))
+	r.GET("/user/goods", _Mall_GetOwnGoods0_HTTP_Handler(srv))
+	r.GET("/user/goods/name/{Name}", _Mall_GetGoodsByName0_HTTP_Handler(srv))
+	r.GET("/user/goods/ID/{ID}", _Mall_GetGoodByID0_HTTP_Handler(srv))
+	r.GET("/user/goods/ID/{ID}", _Mall_DeleteGoodByID0_HTTP_Handler(srv))
 	r.POST("/user/profile", _Mall_CreateProfile0_HTTP_Handler(srv))
 	r.PUT("/user/profile", _Mall_UpdateProfile0_HTTP_Handler(srv))
 	r.GET("/user/profile", _Mall_GetProfile0_HTTP_Handler(srv))
 	r.POST("/register", _Mall_Register0_HTTP_Handler(srv))
 	r.POST("/login", _Mall_Login0_HTTP_Handler(srv))
+}
+
+func _Mall_CreateGood0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateGoodRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallCreateGood)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateGood(ctx, req.(*CreateGoodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CreateGoodReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_UpdateGood0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateGoodRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallUpdateGood)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateGood(ctx, req.(*UpdateGoodRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateGoodReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_GetGoodsByKind0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetGoodsByKindRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallGetGoodsByKind)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetGoodsByKind(ctx, req.(*GetGoodsByKindRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetGoodsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_GetGoodsByUserName0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetGoodsByUserNameRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallGetGoodsByUserName)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetGoodsByUserName(ctx, req.(*GetGoodsByUserNameRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetGoodsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_GetOwnGoods0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetOwnGoodsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallGetOwnGoods)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetOwnGoods(ctx, req.(*GetOwnGoodsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetGoodsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_GetGoodsByName0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetGoodsByNameRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallGetGoodsByName)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetGoodsByName(ctx, req.(*GetGoodsByNameRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetGoodsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_GetGoodByID0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetGoodByIDRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallGetGoodByID)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetGoodByID(ctx, req.(*GetGoodByIDRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetGoodReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Mall_DeleteGoodByID0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteGoodByIDRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationMallDeleteGoodByID)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteGoodByID(ctx, req.(*DeleteGoodByIDRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteGoodReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _Mall_CreateProfile0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error {
@@ -138,10 +332,18 @@ func _Mall_Login0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) error 
 }
 
 type MallHTTPClient interface {
+	CreateGood(ctx context.Context, req *CreateGoodRequest, opts ...http.CallOption) (rsp *CreateGoodReply, err error)
 	CreateProfile(ctx context.Context, req *CreateProfileRequest, opts ...http.CallOption) (rsp *CreateProfileReply, err error)
+	DeleteGoodByID(ctx context.Context, req *DeleteGoodByIDRequest, opts ...http.CallOption) (rsp *DeleteGoodReply, err error)
+	GetGoodByID(ctx context.Context, req *GetGoodByIDRequest, opts ...http.CallOption) (rsp *GetGoodReply, err error)
+	GetGoodsByKind(ctx context.Context, req *GetGoodsByKindRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
+	GetGoodsByName(ctx context.Context, req *GetGoodsByNameRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
+	GetGoodsByUserName(ctx context.Context, req *GetGoodsByUserNameRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
+	GetOwnGoods(ctx context.Context, req *GetOwnGoodsRequest, opts ...http.CallOption) (rsp *GetGoodsReply, err error)
 	GetProfile(ctx context.Context, req *GetProfileRequest, opts ...http.CallOption) (rsp *GetProfileReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
 	Register(ctx context.Context, req *RegisterRequest, opts ...http.CallOption) (rsp *RegisterReply, err error)
+	UpdateGood(ctx context.Context, req *UpdateGoodRequest, opts ...http.CallOption) (rsp *UpdateGoodReply, err error)
 	UpdateProfile(ctx context.Context, req *UpdateProfileRequest, opts ...http.CallOption) (rsp *UpdateProfileReply, err error)
 }
 
@@ -153,6 +355,19 @@ func NewMallHTTPClient(client *http.Client) MallHTTPClient {
 	return &MallHTTPClientImpl{client}
 }
 
+func (c *MallHTTPClientImpl) CreateGood(ctx context.Context, in *CreateGoodRequest, opts ...http.CallOption) (*CreateGoodReply, error) {
+	var out CreateGoodReply
+	pattern := "/mall/goods"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationMallCreateGood))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *MallHTTPClientImpl) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...http.CallOption) (*CreateProfileReply, error) {
 	var out CreateProfileReply
 	pattern := "/user/profile"
@@ -160,6 +375,84 @@ func (c *MallHTTPClientImpl) CreateProfile(ctx context.Context, in *CreateProfil
 	opts = append(opts, http.Operation(OperationMallCreateProfile))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) DeleteGoodByID(ctx context.Context, in *DeleteGoodByIDRequest, opts ...http.CallOption) (*DeleteGoodReply, error) {
+	var out DeleteGoodReply
+	pattern := "/user/goods/ID/{ID}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallDeleteGoodByID))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) GetGoodByID(ctx context.Context, in *GetGoodByIDRequest, opts ...http.CallOption) (*GetGoodReply, error) {
+	var out GetGoodReply
+	pattern := "/user/goods/ID/{ID}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetGoodByID))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) GetGoodsByKind(ctx context.Context, in *GetGoodsByKindRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
+	var out GetGoodsReply
+	pattern := "/mall/goods/{Kind}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetGoodsByKind))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) GetGoodsByName(ctx context.Context, in *GetGoodsByNameRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
+	var out GetGoodsReply
+	pattern := "/user/goods/name/{Name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetGoodsByName))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) GetGoodsByUserName(ctx context.Context, in *GetGoodsByUserNameRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
+	var out GetGoodsReply
+	pattern := "/user/goods/{UserName}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetGoodsByUserName))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) GetOwnGoods(ctx context.Context, in *GetOwnGoodsRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
+	var out GetGoodsReply
+	pattern := "/user/goods"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationMallGetOwnGoods))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -199,6 +492,19 @@ func (c *MallHTTPClientImpl) Register(ctx context.Context, in *RegisterRequest, 
 	opts = append(opts, http.Operation(OperationMallRegister))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *MallHTTPClientImpl) UpdateGood(ctx context.Context, in *UpdateGoodRequest, opts ...http.CallOption) (*UpdateGoodReply, error) {
+	var out UpdateGoodReply
+	pattern := "/mall/goods"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationMallUpdateGood))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -15,8 +15,9 @@ type MallService struct {
 	erc errs.ErrorController
 	uc  *biz.UserUseCase
 	pc  *biz.ProfileUseCase
+	gc  *biz.GoodsUseCase
 }
 
-func NewMallService(uc *biz.UserUseCase, pc *biz.ProfileUseCase, erc errs.ErrorController) *MallService {
-	return &MallService{uc: uc, pc: pc, erc: erc}
+func NewMallService(uc *biz.UserUseCase, pc *biz.ProfileUseCase, gc *biz.GoodsUseCase, erc errs.ErrorController) *MallService {
+	return &MallService{uc: uc, pc: pc, gc: gc, erc: erc}
 }

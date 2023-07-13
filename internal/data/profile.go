@@ -84,7 +84,7 @@ func (p *profileRepo) UpdateProfile(profile biz.Profile) error {
 		return p.unknownErr(err, ProfileError)
 	}
 	// 这步不允许先 commit 在 delete 必须等待 redis 成功删除旧数据后才能commit
-	if err = DeleteCache(profile.UserName, p.data.Rdb); err != nil {
+	if err = DeleteCache(p.data.Rdb, profile.UserName); err != nil {
 		p.log.Error(err)
 		return p.unknownErr(err, ProfileError)
 	}
