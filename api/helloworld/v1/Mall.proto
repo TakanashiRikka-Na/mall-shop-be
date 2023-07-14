@@ -37,15 +37,24 @@ message UpdateGoodReply{
 }
 message  GetGoodsByKindRequest{
 	int64 Kind=1;
+	int64 Page=2;
+	int64 PageSize=3;
 }
 message GetGoodsByNameRequest{
 	string Name=1;
+	int64 Page=2;
+	int64 PageSize=3;
 }
 
 message  GetGoodsByUserNameRequest{
 	string UserName=1;
+	int64 Page=2;
+	int64 PageSize=3;
 }
-message GetOwnGoodsRequest{}
+message GetOwnGoodsRequest{
+	int64 Page=2;
+	int64 PageSize=3;
+}
 message  GetGoodsReply{
 	message Good{
 		string ID=1;
@@ -72,6 +81,8 @@ message GetGoodReply{
 	string Price=5;
 	string FromUser=6;
 	bool   IsSold=7;
+	string Msg=8;
+	string Code=9;
 }
 
 message 	DeleteGoodByIDRequest{
@@ -99,35 +110,35 @@ service Mall {
 
 	rpc GetGoodsByKind(GetGoodsByKindRequest) returns (GetGoodsReply){
 		option(google.api.http)={
-			get:"/mall/goods/{Kind}"
+			get:"/mall/goods/{Kind}/{Page}/{PageSize}"
 		};
 	}
 
 	rpc GetGoodsByUserName(GetGoodsByUserNameRequest) returns (GetGoodsReply){
 		option(google.api.http)={
-			get:"/user/goods/{UserName}"
+			get:"/user/goods/{UserName}/{Page}/{PageSize}"
 		};
 	}
 	rpc GetOwnGoods(GetOwnGoodsRequest) returns (GetGoodsReply){
 		option(google.api.http)={
-			get:"/user/goods"
+			get:"/user/goods/{Page}/{PageSize}"
 		};
 	};
 
 	rpc GetGoodsByName(GetGoodsByNameRequest) returns (GetGoodsReply){
 		option(google.api.http)={
-			get:"/user/goods/name/{Name}"
+			get:"/user/goods/name/{Name}/{Page}/{PageSize}"
 		};
 	};
 
 	rpc GetGoodByID(GetGoodByIDRequest) returns (GetGoodReply){
 		option(google.api.http)={
-			get:"/user/goods/ID/{ID}"
+			get:"/mall/good/ID/{ID}"
 		};
 	};
 	rpc DeleteGoodByID(DeleteGoodByIDRequest) returns (DeleteGoodReply){
 		option(google.api.http)={
-			get:"/user/goods/ID/{ID}"
+			delete:"/user/good/ID/{ID}"
 		};
 	};
 

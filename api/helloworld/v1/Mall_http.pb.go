@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.6.3
 // - protoc             v4.23.2
-// source: api/helloworld/v1/Mall.proto
+// source: api/helloworld/v1/mall.proto
 
 package v1
 
@@ -56,12 +56,12 @@ func RegisterMallHTTPServer(s *http.Server, srv MallHTTPServer) {
 	r := s.Route("/")
 	r.POST("/mall/goods", _Mall_CreateGood0_HTTP_Handler(srv))
 	r.PUT("/mall/goods", _Mall_UpdateGood0_HTTP_Handler(srv))
-	r.GET("/mall/goods/{Kind}", _Mall_GetGoodsByKind0_HTTP_Handler(srv))
-	r.GET("/user/goods/{UserName}", _Mall_GetGoodsByUserName0_HTTP_Handler(srv))
-	r.GET("/user/goods", _Mall_GetOwnGoods0_HTTP_Handler(srv))
-	r.GET("/user/goods/name/{Name}", _Mall_GetGoodsByName0_HTTP_Handler(srv))
-	r.GET("/user/goods/ID/{ID}", _Mall_GetGoodByID0_HTTP_Handler(srv))
-	r.GET("/user/goods/ID/{ID}", _Mall_DeleteGoodByID0_HTTP_Handler(srv))
+	r.GET("/mall/goods/{Kind}/{Page}/{PageSize}", _Mall_GetGoodsByKind0_HTTP_Handler(srv))
+	r.GET("/user/goods/{UserName}/{Page}/{PageSize}", _Mall_GetGoodsByUserName0_HTTP_Handler(srv))
+	r.GET("/user/goods/{Page}/{PageSize}", _Mall_GetOwnGoods0_HTTP_Handler(srv))
+	r.GET("/user/goods/name/{Name}/{Page}/{PageSize}", _Mall_GetGoodsByName0_HTTP_Handler(srv))
+	r.GET("/mall/good/ID/{ID}", _Mall_GetGoodByID0_HTTP_Handler(srv))
+	r.DELETE("/user/good/ID/{ID}", _Mall_DeleteGoodByID0_HTTP_Handler(srv))
 	r.POST("/user/profile", _Mall_CreateProfile0_HTTP_Handler(srv))
 	r.PUT("/user/profile", _Mall_UpdateProfile0_HTTP_Handler(srv))
 	r.GET("/user/profile", _Mall_GetProfile0_HTTP_Handler(srv))
@@ -155,6 +155,9 @@ func _Mall_GetOwnGoods0_HTTP_Handler(srv MallHTTPServer) func(ctx http.Context) 
 	return func(ctx http.Context) error {
 		var in GetOwnGoodsRequest
 		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationMallGetOwnGoods)
@@ -383,11 +386,11 @@ func (c *MallHTTPClientImpl) CreateProfile(ctx context.Context, in *CreateProfil
 
 func (c *MallHTTPClientImpl) DeleteGoodByID(ctx context.Context, in *DeleteGoodByIDRequest, opts ...http.CallOption) (*DeleteGoodReply, error) {
 	var out DeleteGoodReply
-	pattern := "/user/goods/ID/{ID}"
+	pattern := "/user/good/ID/{ID}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallDeleteGoodByID))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -396,7 +399,7 @@ func (c *MallHTTPClientImpl) DeleteGoodByID(ctx context.Context, in *DeleteGoodB
 
 func (c *MallHTTPClientImpl) GetGoodByID(ctx context.Context, in *GetGoodByIDRequest, opts ...http.CallOption) (*GetGoodReply, error) {
 	var out GetGoodReply
-	pattern := "/user/goods/ID/{ID}"
+	pattern := "/mall/good/ID/{ID}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallGetGoodByID))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -409,7 +412,7 @@ func (c *MallHTTPClientImpl) GetGoodByID(ctx context.Context, in *GetGoodByIDReq
 
 func (c *MallHTTPClientImpl) GetGoodsByKind(ctx context.Context, in *GetGoodsByKindRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
 	var out GetGoodsReply
-	pattern := "/mall/goods/{Kind}"
+	pattern := "/mall/goods/{Kind}/{Page}/{PageSize}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallGetGoodsByKind))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -422,7 +425,7 @@ func (c *MallHTTPClientImpl) GetGoodsByKind(ctx context.Context, in *GetGoodsByK
 
 func (c *MallHTTPClientImpl) GetGoodsByName(ctx context.Context, in *GetGoodsByNameRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
 	var out GetGoodsReply
-	pattern := "/user/goods/name/{Name}"
+	pattern := "/user/goods/name/{Name}/{Page}/{PageSize}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallGetGoodsByName))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -435,7 +438,7 @@ func (c *MallHTTPClientImpl) GetGoodsByName(ctx context.Context, in *GetGoodsByN
 
 func (c *MallHTTPClientImpl) GetGoodsByUserName(ctx context.Context, in *GetGoodsByUserNameRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
 	var out GetGoodsReply
-	pattern := "/user/goods/{UserName}"
+	pattern := "/user/goods/{UserName}/{Page}/{PageSize}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallGetGoodsByUserName))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -448,7 +451,7 @@ func (c *MallHTTPClientImpl) GetGoodsByUserName(ctx context.Context, in *GetGood
 
 func (c *MallHTTPClientImpl) GetOwnGoods(ctx context.Context, in *GetOwnGoodsRequest, opts ...http.CallOption) (*GetGoodsReply, error) {
 	var out GetGoodsReply
-	pattern := "/user/goods"
+	pattern := "/user/goods/{Page}/{PageSize}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMallGetOwnGoods))
 	opts = append(opts, http.PathTemplate(pattern))

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.2
-// source: api/helloworld/v1/Mall.proto
+// source: api/helloworld/v1/mall.proto
 
 package v1
 
@@ -555,5 +555,5 @@ var Mall_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/helloworld/v1/Mall.proto",
+	Metadata: "api/helloworld/v1/mall.proto",
 }
