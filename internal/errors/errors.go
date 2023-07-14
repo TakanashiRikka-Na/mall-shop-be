@@ -14,6 +14,7 @@ type ErrorController interface {
 	PasswdValid() *errors.Error
 	PasswdError() *errors.Error
 	GoodExist() *errors.Error
+	GoodNotExist() *errors.Error
 }
 
 func NewErrorController() ErrorController {
@@ -31,12 +32,13 @@ func (*ERR) PasswdError() *errors.Error {
 }
 
 var (
-	UserNotFound  = errors.BadRequest(v1.ErrorReason_USER_NOT_FOUND.String(), "未找到该用户")
-	UserExisted   = errors.BadRequest(v1.ErrorReason_USER_EXISTED.String(), "用户已经存在")
-	PasswdValid   = errors.BadRequest(v1.ErrorReason_PASSWD_NOT_VALID.String(), "密码不符合规范")
-	PasswdError   = errors.BadRequest(v1.ErrorReason_PASSWD_ERROR.String(), "密码错误")
-	UserNameVaild = errors.BadRequest(v1.ErrorReason_USERNAME_NOT_VALID.String(), "用户名不是纯数字")
-	GoodExisted   = errors.BadRequest(v1.ErrorReason_GOODS_EXISTED.String(), "该商品已经存在")
+	UserNotFound   = errors.BadRequest(v1.ErrorReason_USER_NOT_FOUND.String(), "未找到该用户")
+	UserExisted    = errors.BadRequest(v1.ErrorReason_USER_EXISTED.String(), "用户已经存在")
+	PasswdValid    = errors.BadRequest(v1.ErrorReason_PASSWD_NOT_VALID.String(), "密码不符合规范")
+	PasswdError    = errors.BadRequest(v1.ErrorReason_PASSWD_ERROR.String(), "密码错误")
+	UserNameVaild  = errors.BadRequest(v1.ErrorReason_USERNAME_NOT_VALID.String(), "用户名不是纯数字")
+	GoodExisted    = errors.BadRequest(v1.ErrorReason_GOODS_EXISTED.String(), "该商品已经存在")
+	GoodNotExisted = errors.BadRequest(v1.ErrorReason_GOODS_NOT_EXISTED.String(), "该商品不存在")
 )
 
 func (*ERR) UnKnownError() *errors.Error {
@@ -57,4 +59,7 @@ func (*ERR) PasswdValid() *errors.Error {
 
 func (*ERR) GoodExist() *errors.Error {
 	return GoodExisted
+}
+func (*ERR) GoodNotExist() *errors.Error {
+	return GoodNotExisted
 }
