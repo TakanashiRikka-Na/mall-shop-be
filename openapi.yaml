@@ -3,8 +3,611 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Mall API
     version: 0.0.1
-paths: {}
+paths:
+    /login:
+        post:
+            tags:
+                - Mall
+            operationId: Mall_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /mall/good/ID/{ID}:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetGoodByID
+            parameters:
+                - name: ID
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetGoodReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /mall/goods:
+        put:
+            tags:
+                - Mall
+            operationId: Mall_UpdateGood
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateGoodRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateGoodReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - Mall
+            description: 商品信息接口--------------------------------------------------------------------------------------------------
+            operationId: Mall_CreateGood
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateGoodRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateGoodReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /mall/goods/{Kind}/{Page}/{PageSize}:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetGoodsByKind
+            parameters:
+                - name: Kind
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+                - name: Page
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+                - name: PageSize
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetGoodsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /register:
+        post:
+            tags:
+                - Mall
+            description: 登录注册接口--------------------------------------------------------------------------------------------------
+            operationId: Mall_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegisterReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /user/good/ID/{ID}:
+        delete:
+            tags:
+                - Mall
+            operationId: Mall_DeleteGoodByID
+            parameters:
+                - name: ID
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteGoodReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /user/goods/name/{Name}/{Page}/{PageSize}:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetGoodsByName
+            parameters:
+                - name: Name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: Page
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+                - name: PageSize
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetGoodsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /user/goods/{Page}/{PageSize}:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetOwnGoods
+            parameters:
+                - name: Page
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+                - name: PageSize
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetGoodsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /user/goods/{UserName}/{Page}/{PageSize}:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetGoodsByUserName
+            parameters:
+                - name: UserName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: Page
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+                - name: PageSize
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetGoodsReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /user/profile:
+        get:
+            tags:
+                - Mall
+            operationId: Mall_GetProfile
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - Mall
+            operationId: Mall_UpdateProfile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateProfileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - Mall
+            description: 用户信息接口---------------------------------------------------------------------------------------------------
+            operationId: Mall_CreateProfile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateProfileRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateProfileReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
-    schemas: {}
+    schemas:
+        CreateGoodReply:
+            type: object
+            properties:
+                GoodID:
+                    type: string
+                Msg:
+                    type: string
+                Code:
+                    type: string
+        CreateGoodRequest:
+            type: object
+            properties:
+                ID:
+                    type: string
+                Name:
+                    type: string
+                Kind:
+                    type: integer
+                    format: int64
+                Description:
+                    type: string
+                Price:
+                    type: string
+                FromUser:
+                    type: string
+                IsSold:
+                    type: boolean
+        CreateProfileReply:
+            type: object
+            properties:
+                msg:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                UserName:
+                    type: string
+        CreateProfileRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
+        DeleteGoodReply:
+            type: object
+            properties:
+                GoodID:
+                    type: string
+                Msg:
+                    type: string
+                Code:
+                    type: string
+        GetGoodReply:
+            type: object
+            properties:
+                ID:
+                    type: string
+                Name:
+                    type: string
+                Kind:
+                    type: integer
+                    format: int64
+                Description:
+                    type: string
+                Price:
+                    type: string
+                FromUser:
+                    type: string
+                IsSold:
+                    type: boolean
+                Msg:
+                    type: string
+                Code:
+                    type: string
+        GetGoodsReply:
+            type: object
+            properties:
+                Goods:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GetGoodsReply_Good'
+                Msg:
+                    type: string
+                Code:
+                    type: string
+        GetGoodsReply_Good:
+            type: object
+            properties:
+                ID:
+                    type: string
+                Name:
+                    type: string
+                Kind:
+                    type: integer
+                    format: int64
+                Description:
+                    type: string
+                Price:
+                    type: string
+                FromUser:
+                    type: string
+                IsSold:
+                    type: boolean
+        GetProfileReply:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginReply:
+            type: object
+            properties:
+                token:
+                    type: string
+                UserName:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+        LoginRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Password:
+                    type: string
+        RegisterReply:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+        RegisterRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Password:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateGoodReply:
+            type: object
+            properties:
+                GoodID:
+                    type: string
+                Msg:
+                    type: string
+                Code:
+                    type: string
+        UpdateGoodRequest:
+            type: object
+            properties:
+                ID:
+                    type: string
+                Name:
+                    type: string
+                Kind:
+                    type: integer
+                    format: int64
+                Description:
+                    type: string
+                Price:
+                    type: string
+                FromUser:
+                    type: string
+                IsSold:
+                    type: boolean
+        UpdateProfileReply:
+            type: object
+            properties:
+                msg:
+                    type: string
+                code:
+                    type: integer
+                    format: int64
+                UserName:
+                    type: string
+        UpdateProfileRequest:
+            type: object
+            properties:
+                UserName:
+                    type: string
+                Gender:
+                    type: string
+                Phone:
+                    type: string
+                Email:
+                    type: string
+                Addr:
+                    type: array
+                    items:
+                        type: string
+                Order:
+                    type: array
+                    items:
+                        type: string
+tags:
+    - name: Mall
