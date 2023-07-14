@@ -45,11 +45,12 @@ func NewHTTPServer(c *conf.Server, Mall *service.MallService, logger log.Logger)
 func NewSkipRoutersMatcher() selector.MatchFunc {
 
 	skipRouters := map[string]struct{}{
-		"/api.helloworld.v1.User/Login":    {},
-		"/api.helloworld.v1.User/Register": {},
+		"/api.helloworld.v1.Mall/Login":    {},
+		"/api.helloworld.v1.Mall/Register": {},
 	}
 
 	return func(ctx context.Context, operation string) bool {
+		log.Info(operation)
 		if _, ok := skipRouters[operation]; ok {
 			return false
 		}
